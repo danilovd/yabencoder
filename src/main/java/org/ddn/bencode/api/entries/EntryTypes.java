@@ -1,7 +1,7 @@
 package org.ddn.bencode.api.entries;
 
 /**
- * Created by Denis on 07.11.2015.
+ * Types of B-Encode entries
  */
 public enum EntryTypes {
 

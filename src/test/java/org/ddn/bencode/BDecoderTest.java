@@ -6,6 +6,7 @@ import org.ddn.bencode.api.entries.Entry;
 import org.ddn.bencode.api.entries.types.DictionaryEntry;
 import org.ddn.bencode.api.entries.types.ListEntry;
 import org.ddn.bencode.impl.BDecoderImpl;
+import org.ddn.bencode.impl.entries.types.StringEntryImpl;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -55,6 +56,6 @@ public class BDecoderTest {
         assertThat("Missing entry", d, dictionaryContainsEntry("number", 42L));
         assertThat("Missing entry", d, dictionaryContainsEntry("picture", ""));
 
-        assertThat("Missing entry", d.get("planets"), listContainsValues("Earth", "Somewhere else", "Old Earth"));
+        assertThat("Missing entry", d.get(StringEntryImpl.valueOf("planets")), listContainsValues("Earth", "Somewhere else", "Old Earth"));
     }
 }

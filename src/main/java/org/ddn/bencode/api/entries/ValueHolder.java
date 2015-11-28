@@ -5,5 +5,9 @@ package org.ddn.bencode.api.entries;
  */
 public interface ValueHolder<T> {
 
+    /**
+     * method returns value that current object holds
+     * @return value
+     */
     T getValue();
 }

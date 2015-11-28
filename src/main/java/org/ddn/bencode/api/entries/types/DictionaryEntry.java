@@ -12,6 +12,7 @@ public interface DictionaryEntry extends CompositeEntry<Map<String, ?>> {
 
     Map<String, Object> getValue();
 
-    Entry get(String key);
     Entry get(StringEntry keyEntry);
+    Entry put(StringEntry key, Entry value);
+    Entry remove(StringEntry key);
 }

@@ -87,16 +87,17 @@ public class DictionaryEntryImpl implements DictionaryEntry {
         return result;
     }
 
-    public Entry get(String key) {
-        return get(StringEntryImpl.valueOf(key));
-    }
-
     public Entry get(StringEntry keyEntry) {
         return dictionary.get(keyEntry);
     }
 
-//    @Override
-//    public Object getValue() {
-//        return getDictionary();
-//    }
+    @Override
+    public Entry put(StringEntry key, Entry value) {
+        return dictionary.put(key, value);
+    }
+
+    @Override
+    public Entry remove(StringEntry key) {
+        return dictionary.remove(key);
+    }
 }

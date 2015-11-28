@@ -26,7 +26,7 @@ public class EntryFactoryImpl implements EntryFactory {
         return new StringEntryImpl(value);
     }
 
-    public IntegerEntry createIntegerEntry(long value) {
+    public IntegerEntry createIntegerEntry(Long value) {
         return new IntegerEntryImpl(value);
     }
 
