@@ -28,7 +28,7 @@ public class BEncoderTest {
     @Test
     public void testBEncoder_encodeNegativeInteger() throws BEncodeException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        bEncoder.encode(bout, entryFactory.createIntegerEntry(-42));
+        bEncoder.encode(bout, entryFactory.createIntegerEntry(-42L));
         assertTrue("Incorrect encoding of integer entry", new String(bout.toByteArray(), CHARSET).contains("i-42e"));
     }
 

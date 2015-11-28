@@ -28,6 +28,13 @@ public interface EntryFactory {
     IntegerEntry createIntegerEntry(Long value);
 
     /**
+     * returns a new entry of integer type with a given value
+     * @param value integer to be wrapped by entry
+     * @return integer entry
+     */
+    IntegerEntry createIntegerEntry(Integer value);
+
+    /**
      * creates a new list entry containing given entries
      * @param entries entries to be added to the list
      * @return list entry

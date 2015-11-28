@@ -30,6 +30,11 @@ public class EntryFactoryImpl implements EntryFactory {
         return new IntegerEntryImpl(value);
     }
 
+    @Override
+    public IntegerEntry createIntegerEntry(Integer value) {
+        return new IntegerEntryImpl(value);
+    }
+
     public ListEntry createListEntry(List<? extends Entry> entryList) {
         if(entryList == null){
             throw new IllegalArgumentException("List is null");
