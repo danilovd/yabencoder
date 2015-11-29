@@ -33,7 +33,6 @@ public class ListEntryImpl implements ListEntry {
     public void writeTo(BEncodeContext ctx, OutputStream out) throws IOException {
 
         if(ctx.isPrettyPrintingEnabled()){
-
             writeFormattedValue(ctx, out);
         } else {
             writeValue(ctx, out);

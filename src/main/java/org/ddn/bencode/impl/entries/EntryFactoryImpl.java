@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Denis on 04.11.2015.
+ * Factory produces implementations of B-Encode Entries
+ * @see org.ddn.bencode.api.entries.Entry
  */
 public class EntryFactoryImpl implements EntryFactory {
 
+    @Override
     public StringEntry createStringEntry(String value) {
         if(value == null){
             throw new IllegalArgumentException("Value is null");
@@ -26,6 +28,7 @@ public class EntryFactoryImpl implements EntryFactory {
         return new StringEntryImpl(value);
     }
 
+    @Override
     public IntegerEntry createIntegerEntry(Long value) {
         return new IntegerEntryImpl(value);
     }
@@ -35,6 +38,7 @@ public class EntryFactoryImpl implements EntryFactory {
         return new IntegerEntryImpl(value);
     }
 
+    @Override
     public ListEntry createListEntry(List<? extends Entry> entryList) {
         if(entryList == null){
             throw new IllegalArgumentException("List is null");
@@ -42,10 +46,12 @@ public class EntryFactoryImpl implements EntryFactory {
         return new ListEntryImpl(entryList);
     }
 
+    @Override
     public ListEntry createListEntry(Entry... entries) {
         return createListEntry(Arrays.asList(entries));
     }
 
+    @Override
     public DictionaryEntry createDictionaryEntry(Map<StringEntry, Entry> entryMap) {
         if(entryMap == null){
             throw new IllegalArgumentException("Map is null");

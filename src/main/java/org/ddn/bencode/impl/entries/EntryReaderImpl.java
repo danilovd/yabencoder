@@ -20,17 +20,32 @@ import java.util.Map;
 import static org.ddn.bencode.api.BEncodeFormat.*;
 
 /**
- * Created by Denis on 16.11.2015.
+ * Default EntryReader implementation.
+ * The main functionality of the class is to read input stream, parse data, and create entries using EntryFactory.
+ * @see org.ddn.bencode.api.entries.reader.EntryReader
+ * @see org.ddn.bencode.api.entries.EntryFactory
  */
 public class EntryReaderImpl implements EntryReader {
 
+    /**
+     * default size of buffer that is used for reading string entries
+     */
     public static final int STRING_BUFFER_SIZE = 1024;
+
+    /**
+     * default size of buffer that is used for reading number entries
+     */
     public static final int TEMP_BUFFER_SIZE = 20;
 
     private final InputStream in;
     private final EntryFactory entryFactory;
     private int currentPosition = 0;
 
+    /**
+     * creates a new EntryReader instance
+     * @param entryFactory factory to create entities
+     * @param in input stream to read data from
+     */
     public EntryReaderImpl(EntryFactory entryFactory, InputStream in) {
         this.entryFactory = entryFactory;
         this.in = in;
@@ -138,8 +153,9 @@ public class EntryReaderImpl implements EntryReader {
                             currentPosition+=length;
 
                             return entryFactory.createStringEntry(value);
-                        } else if (Character.isDigit(byteRead)) { // string started
+                        } else if (Character.isDigit(byteRead)) {
 
+                            // if int and str are not started -> consider that a new string has started
                             if(!ctx.isIntegerStarted() && !ctx.isStringStarted()){
 
                                 // start string
@@ -189,6 +205,33 @@ public class EntryReaderImpl implements EntryReader {
             p *= 10;
         }
         return negative ? -value : value;
+    }
+
+    private Long readNumber() throws IOException, BEncodeParsingException {
+        long value = 0;
+        long p = 1;
+        boolean negative = false;
+
+        int byteRead;
+        int position = 0;
+        while((byteRead = in.read()) != -1){
+
+            position++;
+            if(position == 1 && byteRead == MINUS_SIGN){
+                negative = true;
+                continue;
+            }
+            if(byteRead == END_SUFFIX){
+                break;
+            }
+            int digit = Character.digit((char) byteRead, 10);
+            if(digit == -1){
+                throw new BEncodeParsingException("Unexpected character. Digit is expected at position "
+                        + (currentPosition + position));
+            }
+            value += value*10 + digit;
+        }
+        return value;
     }
 
     private String readString(int length) throws IOException, BEncodeParsingException {
