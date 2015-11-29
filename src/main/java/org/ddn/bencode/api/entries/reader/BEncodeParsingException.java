@@ -3,7 +3,7 @@ package org.ddn.bencode.api.entries.reader;
 import org.ddn.bencode.api.BEncodeException;
 
 /**
- * Created by Denis on 22.11.2015.
+ * Encapsulates B-Encode incorrect format error
  */
 public class BEncodeParsingException extends BEncodeException {
 

@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by Denis on 04.11.2015.
+ * Default B-Encode serializer implementation.
+ * The main functionality of this class is to take B-Encode entries and write them to output stream
+ * @see org.ddn.bencode.api.entries.Entry
  */
 public class BEncoderImpl implements BEncoder {
 
@@ -25,11 +27,18 @@ public class BEncoderImpl implements BEncoder {
     @NotNull
     private final Properties props;
 
+    /**
+     * Default constructor. Default properties will be loaded
+     */
     public BEncoderImpl(){
         this.props = new Properties();
         loadProperties();
     }
 
+    /**
+     * Constructs a new customized instance
+     * @param props custom properties
+     */
     public BEncoderImpl(Properties props){
         this.props = props;
     }
@@ -49,8 +58,8 @@ public class BEncoderImpl implements BEncoder {
         }
     }
 
+    @Override
     public void encode(OutputStream out, Collection<? extends Entry> entries) throws BEncodeException {
-
         BEncodeContext ctx = new BEncodeContextImpl();
         initializeContext(ctx);
 

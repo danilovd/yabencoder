@@ -13,17 +13,27 @@ import java.io.InputStream;
 import java.util.Collection;
 
 /**
- * Created by Denis on 21.11.2015.
+ * Default B-Encode deserializer.
+ * The main functionality of the class is to read data from input stream and construct entries from it
+ * @see org.ddn.bencode.api.entries.Entry
  */
 public class BDecoderImpl implements BDecoder {
 
     @NotNull
     private final EntryReaderFactory entryReaderFactory;
 
+    /**
+     * Default constructor
+     */
     public BDecoderImpl() {
         this.entryReaderFactory = new EntryReaderFactoryImpl(new EntryFactoryImpl());
     }
 
+    /**
+     * Constructs a new instance with a given EntryReaderFactory
+     * @param entryReaderFactory custom entryReaderFactory
+     * @see org.ddn.bencode.api.entries.reader.EntryReaderFactory
+     */
     public BDecoderImpl(EntryReaderFactory entryReaderFactory) {
         this.entryReaderFactory = entryReaderFactory;
     }

@@ -8,12 +8,14 @@ import java.util.Map;
 import static org.ddn.bencode.api.BEncodeFormat.*;
 
 /**
- * Created by Denis on 22.11.2015.
+ * The class holds temporary data and process properties.
+ *  Not thread safe.
  */
 public class BEncodeContextImpl implements BEncodeContext {
 
 
     private final Map<String, Object> props = new HashMap<>();
+
     private boolean listStarted;
     private boolean dictionaryStarted;
     private boolean intStarted;
