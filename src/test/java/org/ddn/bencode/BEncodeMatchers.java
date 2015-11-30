@@ -18,9 +18,6 @@ import static org.ddn.bencode.api.BEncodeFormat.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Denis on 04.11.2015.
- */
 public class BEncodeMatchers {
 
     public static Matcher<ByteArrayOutputStream> beginsWith(final String prefix){

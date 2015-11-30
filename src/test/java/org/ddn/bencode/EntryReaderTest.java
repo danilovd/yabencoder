@@ -15,9 +15,6 @@ import static org.junit.Assert.*;
 import static org.ddn.bencode.BEncodeMatchers.*;
 import static org.ddn.bencode.api.BEncodeFormat.CHARSET;
 
-/**
- * Created by Denis on 17.11.2015.
- */
 public class EntryReaderTest {
 
     private static EntryReader createReader(byte[] binary){

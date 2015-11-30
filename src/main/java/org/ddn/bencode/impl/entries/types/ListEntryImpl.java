@@ -14,9 +14,6 @@ import java.util.List;
 
 import static org.ddn.bencode.api.BEncodeFormat.*;
 
-/**
- * Created by Denis on 04.11.2015.
- */
 public class ListEntryImpl implements ListEntry {
 
     @NotNull

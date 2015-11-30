@@ -16,9 +16,6 @@ import static org.junit.Assert.*;
 import static org.ddn.bencode.api.BEncodeFormat.CHARSET;
 import static org.ddn.bencode.impl.entries.utils.CompositeEntryBuilder.*;
 
-/**
- * Created by Denis on 22.11.2015.
- */
 public class BEncoderPrettyPrintingTest {
 
     private BEncoder bEncoder;

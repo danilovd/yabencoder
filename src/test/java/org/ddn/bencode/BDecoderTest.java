@@ -17,9 +17,6 @@ import static org.junit.Assert.*;
 import static org.ddn.bencode.api.BEncodeFormat.CHARSET;
 import static org.ddn.bencode.BEncodeMatchers.*;
 
-/**
- * Created by Denis on 22.11.2015.
- */
 public class BDecoderTest {
 
     private BDecoder decoder = new BDecoderImpl();
