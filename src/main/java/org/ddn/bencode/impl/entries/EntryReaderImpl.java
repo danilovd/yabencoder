@@ -32,18 +32,13 @@ public class EntryReaderImpl implements EntryReader {
      */
     public static final int STRING_BUFFER_SIZE = 1024;
 
-    /**
-     * default size of buffer that is used for reading number entries
-     */
-    public static final int TEMP_BUFFER_SIZE = 20;
-
     private final InputStream in;
     private final EntryFactory entryFactory;
     private int currentPosition = 0;
 
     /**
      * creates a new EntryReader instance
-     * @param entryFactory factory to create entities
+     * @param entryFactory factory that creates entities
      * @param in input stream to read data from
      */
     public EntryReaderImpl(EntryFactory entryFactory, InputStream in) {
@@ -58,8 +53,6 @@ public class EntryReaderImpl implements EntryReader {
 
     public Entry readEntry(BEncodeContext ctx) throws BEncodeException {
         try {
-
-            ByteBuffer buffer = null; // buffer to hold temp data
 
             char byteRead;
 
@@ -118,19 +111,14 @@ public class EntryReaderImpl implements EntryReader {
                     case INTEGER_PREFIX:
 
                         ctx.startInt();
-                        if(buffer == null) {
-                            buffer = ByteBuffer.allocate(TEMP_BUFFER_SIZE);
-                        }
-                        break;
-                    case END_SUFFIX:
-                        if (ctx.isIntegerStarted()) {
-                            // int ended
-                            long value = readNumberFromBuffer(buffer);
-                            buffer.flip();
 
-                            ctx.endInt();
-                            return entryFactory.createIntegerEntry(value);
-                        } else if(ctx.isDictionaryStarted()){
+                        long value = readNumber(END_SUFFIX);
+                        ctx.endInt();
+                        return entryFactory.createIntegerEntry(value);
+                        //break;
+                    case END_SUFFIX:
+
+                        if(ctx.isDictionaryStarted()){
                             ctx.endDictionary();
                         } else if(ctx.isListStarted()){
                             ctx.endList();
@@ -139,44 +127,19 @@ public class EntryReaderImpl implements EntryReader {
 
                     default:
 
-                        if(byteRead == STRING_SEPARATOR){
+                         if(Character.isDigit(byteRead)){
+                             // it has to be string
+                             ctx.startString();
 
-                            if(!ctx.isStringStarted()){
-                                throw new BEncodeParsingException("Unexpected character " +
-                                        STRING_SEPARATOR + " at position " + currentPosition);
-                            }
-
-                            int length = (int) readNumberFromBuffer(buffer);
-                            String value = readString(length);
-                            ctx.endString();
-
-                            currentPosition+=length;
-
-                            return entryFactory.createStringEntry(value);
-                        } else if (Character.isDigit(byteRead)) {
-
-                            // if int and str are not started -> consider that a new string has started
-                            if(!ctx.isIntegerStarted() && !ctx.isStringStarted()){
-
-                                // start string
-                                ctx.startString();
-                                buffer = ByteBuffer.allocate(TEMP_BUFFER_SIZE); //buffer for str length
-                            }
-                            buffer.put((byte) byteRead);
-                            break;
-
-                        } else if(byteRead == MINUS_SIGN){
-                            if(!ctx.isIntegerStarted()) {
-                                throw new BEncodeParsingException("Unexpected character " + MINUS_SIGN +
-                                        " at position " + currentPosition);
-                            }
-                            buffer.put((byte) byteRead);
-                            break;
-
-                        } else if (!Character.isSpaceChar(byteRead) && byteRead != '\n') {
-                            throw new BEncodeParsingException("Unexpected character '" + byteRead + "' at position "
-                                    + currentPosition);
-                        }
+                             // first character of string length we have already read
+                             long strLength = readNumber(byteRead, STRING_SEPARATOR);
+                             String strValue = readString((int)strLength);
+                             ctx.endString();
+                             return entryFactory.createStringEntry(strValue);
+                         } else if(!Character.isSpaceChar(byteRead) && byteRead != '\n') {
+                             throw new BEncodeParsingException("Illegal character " + byteRead + " at position "
+                                     + currentPosition);
+                         }
                 }
             }
 
@@ -187,67 +150,80 @@ public class EntryReaderImpl implements EntryReader {
         return null;
     }
 
-    private long readNumberFromBuffer(ByteBuffer buffer) throws BEncodeParsingException {
-        long value = 0;
-        long p = 1;
-        boolean negative = false;
-        for (int i = buffer.position()-1; i >= 0; i--) {
-
-            if(i==0 && buffer.get(i) == '-'){
-                negative = true;
-                break;
-            }
-            int digit = Character.digit(buffer.get(i), 10);
-            if (digit == -1) {
-                throw new BEncodeParsingException("Unexpected character. Digit is expected at buffer pos " + i);
-            }
-            value += digit * p;
-            p *= 10;
-        }
-        return negative ? -value : value;
-    }
-
-    private Long readNumber() throws IOException, BEncodeParsingException {
-        long value = 0;
-        long p = 1;
+    /**
+     * method reads characters from input stream and calculates a number from it
+     * @param firstCharacter the first digit of the number in form of character
+     * @param endCharacter the end of the number character
+     * @return calculated number
+     * @throws IOException if failed to read data from the input stream
+     * @throws BEncodeParsingException if invalid character has been read from the stream
+     */
+    private Long readNumber(char firstCharacter, char endCharacter) throws IOException, BEncodeParsingException {
+        long value = Character.digit(firstCharacter, 10);
         boolean negative = false;
 
         int byteRead;
-        int position = 0;
+        int positionInNumber = 0;
         while((byteRead = in.read()) != -1){
 
-            position++;
-            if(position == 1 && byteRead == MINUS_SIGN){
+            positionInNumber++;
+            if(positionInNumber == 1 && byteRead == MINUS_SIGN){
                 negative = true;
                 continue;
             }
-            if(byteRead == END_SUFFIX){
+            if(byteRead == endCharacter){
                 break;
             }
             int digit = Character.digit((char) byteRead, 10);
             if(digit == -1){
                 throw new BEncodeParsingException("Unexpected character. Digit is expected at position "
-                        + (currentPosition + position));
+                        + (currentPosition += positionInNumber));
             }
-            value += value*10 + digit;
+            value = value*10 + digit;
         }
-        return value;
+        currentPosition += positionInNumber;
+        return negative ?  -value : value;
     }
 
+    /**
+     * method does the same as {@link EntryReaderImpl#readNumber(char, char)} but if we have not read any digit from the number
+     * @param endCharacter the end of the number character
+     * @return calculated number
+     * @throws IOException if failed to read from the stream
+     * @throws BEncodeException if incorrect character was read from the stream
+     */
+    private Long readNumber(char endCharacter) throws IOException, BEncodeException {
+        return readNumber('0', endCharacter);
+    }
+
+    /**
+     * method reads a string from the input stream having specified length
+     * @param length the expected length of the string
+     * @return string
+     * @throws IOException if failed to read from the stream
+     * @throws BEncodeParsingException if failed to read data of sufficient length
+     */
     private String readString(int length) throws IOException, BEncodeParsingException {
+        // if length is too long we use buffer of fixed size
         byte[] buf = new byte[length > STRING_BUFFER_SIZE ? STRING_BUFFER_SIZE : length];
+        StringBuilder sb = new StringBuilder();
+
         int l;
         int bytesRead = 0;
-        StringBuilder sb = new StringBuilder();
-        int lengthToRead = buf.length;
+        int lengthToRead = buf.length; // shows how many bytes we should read. it is important for the last iteration
         while( (l=in.read(buf,0, lengthToRead)) != -1 && bytesRead!=length){
             bytesRead+=l;
             sb.append(new String(buf, 0, l));
-            lengthToRead = buf.length > length - bytesRead ? length - bytesRead : buf.length;
+
+            if(buf.length > length - bytesRead){
+                lengthToRead = length - bytesRead;
+            }
         }
+
         if(bytesRead < length){
-            throw new BEncodeParsingException("Unexpected end of string entry");
+            throw new BEncodeParsingException("Unexpected end of string entry. Expected length " + length);
         }
+        currentPosition+=length;
         return sb.toString();
     }
 }

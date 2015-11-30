@@ -10,32 +10,32 @@ public final class BEncodeFormat {
     /**
      * B-Encode spec: Integers are prefixed with 'i'
      */
-    public static final byte INTEGER_PREFIX = 'i';
+    public static final char INTEGER_PREFIX = 'i';
 
     /**
      * B-Encode spec: dictionaries are prefixed with 'd'
      */
-    public static final byte DICTIONARY_PREFIX = 'd';
+    public static final char DICTIONARY_PREFIX = 'd';
 
     /**
      * B-Encode spec: lists are prefixed with 'l'
      */
-    public static final byte LIST_PREFIX = 'l';
+    public static final char LIST_PREFIX = 'l';
 
     /**
      * B-Encode spec: integers, dictionaries and lists are ended with 'e'
      */
-    public static final byte END_SUFFIX = 'e';
+    public static final char END_SUFFIX = 'e';
 
     /**
-     * B-Encode spec: String have the following format <length 10base ASCII>:<content>
+     * B-Encode spec: String have the following format {@literal <}length 10base ASCII{@literal >}:{@literal <}content{@literal >}
      */
-    public static final byte STRING_SEPARATOR = ':';
+    public static final char STRING_SEPARATOR = ':';
 
     /**
      * Minus to denote negative integers
      */
-    public static final byte MINUS_SIGN = '-';
+    public static final char MINUS_SIGN = '-';
 
     /**
      * B-Encode charset

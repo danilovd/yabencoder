@@ -19,7 +19,7 @@ public interface DictionaryEntry extends CompositeEntry<Map<String, ?>> {
 
     /**
      * returns the entry that is associated with the given keyEntry
-     * @param keyEntry
+     * @param keyEntry key entry
      * @return entry associated with the key entry
      */
     Entry get(StringEntry keyEntry);

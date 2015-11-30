@@ -9,7 +9,7 @@ import static org.ddn.bencode.api.BEncodeFormat.*;
 
 /**
  * The class holds temporary data and process properties.
- * <b>Note: Not thread safe</b>
+ * <b>Not thread safe</b>
  */
 public class BEncodeContextImpl implements BEncodeContext {
 

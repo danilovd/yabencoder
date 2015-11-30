@@ -16,7 +16,8 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Default B-Encode serializer implementation.
- * The main functionality of this class is to take B-Encode entries and write them to output stream
+ * The main functionality of this class is to take B-Encode entries and write them to output stream.
+ * It is also responsible for formatting output.
  * @see org.ddn.bencode.api.entries.Entry
  */
 public class BEncoderImpl implements BEncoder {

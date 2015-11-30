@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * The interface represents list entry.
- * Lists are encoded as follows: l<bencoded values>e.
+ * Lists are encoded as follows: l{@literal <}bencoded values{@literal >}e.
  * The initial l and trailing e are beginning and ending delimiters.
  * Lists may contain any bencoded type, including integers, strings, dictionaries, and even lists within other lists.
  * <p>
