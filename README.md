@@ -4,8 +4,8 @@ Yet another library for encoding and decoding data in b-encode format. The forma
 
 ## Quick start
 ### How to create entries
-Entries are defined by interface **org.ddn.bencode.api.entries.Entry** and represent b-encode format entity.
-Entries can be created using **org.ddn.bencode.api.entries.EntryFactory** interface.
+Entries are defined by interface [Entry](http://danilovd.github.io/yabencoder/org/ddn/bencode/api/entries/Entry.html) and represent b-encode format entity.
+Entries can be created using [EntryFactory](http://danilovd.github.io/yabencoder/org/ddn/bencode/api/entries/EntryFactory.html) interface.
 ```java
 EntryFactory entryFactory = new EntryFactoryImpl()
 
@@ -18,28 +18,27 @@ Map<StringEntry,Entry> map = new HashMap<>();
 map.put(strEntry, intEntry);
 DictionaryEntry dictionary = entryFactory.createDictionaryEntry(map);
 ```
-or using **org.ddn.bencode.impl.entries.utils.CompositeEntryBuilder** for dictionaries and lists
+or using [CompositeEntryBuilder](http://danilovd.github.io/yabencoder/org/ddn/bencode/impl/entries/utils/CompositeEntryBuilder.html) for dictionaries and lists
 ```java
-DictionaryEntry e = dictionary()
-                .entry("name", "Arthur")
-                .entry("number", 42L)
-                .entry("picture", "")
-                .entry("planets", list("Earth", "Somewhere else", "Old Earth"))
-                .create();
+DictionaryEntry entry = dictionary()
+    .entry("name", "Arthur")
+    .entry("number", 42L)
+    .entry("picture", "")
+    .entry("planets", list("Earth", "Somewhere else", "Old Earth"))
+    .create();
 ```
 ### How to encode data
-Encoding is done using **org.ddn.bencode.api.BEncoder** interface. It takes output stream and collection of entries to be encoded. 
+Encoding is done using [BEncoder](http://danilovd.github.io/yabencoder/org/ddn/bencode/api/BEncoder.html) interface. It takes output stream and collection of entries to be encoded. 
 ```java
 BEncoder bencoder = new BEncoderImpl();
 bencoder.encode(outStream, entriesToEncode);
 ```
-Entries will be written do output stream.
+Entries will be written to output stream.
 
 
 ### How to decode data
-Decoding is done using **org.ddn.bencode.api.BDecoder**. BDecoder reads data from input stream, creates entries from it, and puts them into a given collection.
+Decoding is done using [BDecoder](http://danilovd.github.io/yabencoder/org/ddn/bencode/api/BDecoder.html). BDecoder reads data from input stream, creates entries from it, and puts them into a given collection.
 ```java
 BDecoder bdecoder = new BDecoderImpl();
 bdecoder.decode(inStream, decodedEntries);
 ```
-

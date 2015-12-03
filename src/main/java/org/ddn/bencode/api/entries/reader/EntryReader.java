@@ -11,7 +11,7 @@ public interface EntryReader {
 
     /**
      * Method returns next entry if it is available
-     * @return next entry or <code>null</code> if entry is available to read
+     * @return next entry or <code>null</code> if no entries are available to read
      * @throws BEncodeException if reading entry is failed due to incorrect B-Encode format 
      */
     Entry readEntry() throws BEncodeException;
