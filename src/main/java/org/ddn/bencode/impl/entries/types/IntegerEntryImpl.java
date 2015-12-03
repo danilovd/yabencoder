@@ -5,7 +5,6 @@ import org.ddn.bencode.api.entries.types.IntegerEntry;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 import static org.ddn.bencode.api.BEncodeFormat.*;
 

@@ -2,7 +2,6 @@ package org.ddn.bencode.api;
 
 import org.ddn.bencode.api.entries.Entry;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 

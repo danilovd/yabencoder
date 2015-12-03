@@ -11,7 +11,6 @@ import org.ddn.bencode.impl.BEncodeContextImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

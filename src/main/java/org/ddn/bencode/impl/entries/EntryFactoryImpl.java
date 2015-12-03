@@ -30,11 +30,17 @@ public class EntryFactoryImpl implements EntryFactory {
 
     @Override
     public IntegerEntry createIntegerEntry(Long value) {
+        if(value == null){
+            throw new IllegalArgumentException("Value is null");
+        }
         return new IntegerEntryImpl(value);
     }
 
     @Override
     public IntegerEntry createIntegerEntry(Integer value) {
+        if(value == null){
+            throw new IllegalArgumentException("Value is null");
+        }
         return new IntegerEntryImpl(value);
     }
 
